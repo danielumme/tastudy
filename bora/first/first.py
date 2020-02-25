@@ -27,5 +27,15 @@ def login(id, pw):
     driver.find_element_by_name('password').send_keys(Keys.ENTER)
 
 
-login('', '')
+login(input("ID: "), input("PW: "))
 
+
+def posting():
+    driver.find_element_by_css_selector(".thumb_profile").click()
+    driver.find_element_by_link_text('쓰기').click()
+    driver.find_element_by_css_selector(".textarea_tit").send_keys("제목 입력")
+    driver.find_element_by_css_selector("#tinymce").send_keys("내용 입력")
+    driver.find_element_by_name('tagText').send_keys("태그1" + Keys.ENTER)
+
+
+posting()

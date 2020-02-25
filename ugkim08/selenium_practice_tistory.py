@@ -21,9 +21,9 @@ time.sleep(1)
 driver.find_element(By.XPATH, '//*[@id="kakaoHead"]/div/div[3]/div/a[1]').click()
 
 # email주소 및 pw입력
-driver.find_element(By.NAME, 'loginId').send_keys('wlgk0118@daum.net')
+driver.find_element(By.NAME, 'loginId').send_keys('Email')
 time.sleep(0.5)
-driver.find_element(By.NAME, 'password').send_keys('ekdldjxm!85#')
+driver.find_element(By.NAME, 'password').send_keys('PW')
 time.sleep(0.5)
 
 # 로그인 버튼 클릭

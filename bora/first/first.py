@@ -24,7 +24,7 @@ def login(id, pw):
     driver.find_element_by_name('password').send_keys(Keys.ENTER)
 
 
-login('eunsk31@daum.net', 'master123$')
+login('eunsk31@daum.net', '')
 
 
 # 이미지 첨부 함수

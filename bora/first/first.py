@@ -24,7 +24,7 @@ def login(id, pw):
     driver.find_element_by_name('password').send_keys(Keys.ENTER)
 
 
-login('eunsk31@daum.net', '')
+login('eunsk31@daum.net', 'master123$')
 
 
 # 이미지 첨부 함수
@@ -33,7 +33,7 @@ def upload_img(filepath):
     app = pywinauto.application.Application().connect(title_re="열기")
     # 함수 인자로 받은 파일 경로 입력
     app.열기.Edit.set_edit_text(filepath)
-    # '열기' 버튼 클릭
+    # [열기] 버튼 클릭
     app.열기.Button.click()
 
 
@@ -63,7 +63,7 @@ def posting():
     driver.switch_to.default_content()
     # 태그1-3 입력
     driver.find_element_by_name('tagText').send_keys("태그1" + Keys.ENTER + "태그2" + Keys.ENTER + "태그3" + Keys.ENTER)
-    # '완료' 버튼 클릭
+    # [완료] 버튼 클릭
     driver.find_element_by_css_selector('.btn.btn-default').click()
     driver.implicitly_wait(5)
 
@@ -78,19 +78,9 @@ def posting():
     print(driver.find_element_by_id('open15').get_attribute('value'))
     print(driver.find_element_by_css_selector('.btn.btn-default').is_enabled())
 
-    delay = 5  # seconds
-
-    while 1:
-        try:
-            WebDriverWait(driver, delay).until(expected_conditions.invisibility_of_element(
-                (By.CSS_SELECTOR, '.tit_cont')
-            )
-            )
-            driver.find_element_by_css_selector('.btn.btn-default').click()
-            print("계속 클릭 중")
-        except NoSuchElementException:
-            print("클릭 그마안")
-            break
+    # [완료 > 두번째 저장] 클릭
+    # [완료]와 [두번째 저장] 버튼 클래스가 동일해서 [두번째 저장]을 클릭하려면 배열 요소를 명시해줘야 함
+    driver.find_elements_by_css_selector('.btn.btn-default')[1].click()
 
 
 posting()

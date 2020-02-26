@@ -4,7 +4,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import NoSuchElementException
-import time
+import pywinauto
+import time, sys
+
 # from bs4 import BeautifulSoup
 # from urllib.request import urlopen
 
@@ -14,14 +16,7 @@ driver.get(url)
 time.sleep(1)
 
 
-# 네이버는 로그인 자동입력방지 시스템 때문에 drop
-# def login(id, pw):
-#     driver.find_element_by_css_selector('.ico_local_login.lang_ko').click()
-#     driver.find_element_by_name('id').send_keys(id)
-#     driver.find_element_by_name('pw').send_keys(pw)
-#     driver.find_element_by_name('pw').send_keys(Keys.ENTER)
-
-
+# 티스토리 로그인 함수
 def login(id, pw):
     driver.find_element_by_link_text('로그인하기').click()
     driver.find_element_by_name('loginId').send_keys(id)
@@ -32,20 +27,43 @@ def login(id, pw):
 login('eunsk31@daum.net', '')
 
 
+# 이미지 첨부 함수
+def upload_img(filepath):
+    # '열기' 타이틀 windows dialog에 커넥
+    app = pywinauto.application.Application().connect(title_re="열기")
+    # 함수 인자로 받은 파일 경로 입력
+    app.열기.Edit.set_edit_text(filepath)
+    # '열기' 버튼 클릭
+    app.열기.Button.click()
+
+
+# 블로그 포스팅 함수
 def posting():
     driver.find_element_by_css_selector('.thumb_profile').click()
     driver.find_element_by_link_text('쓰기').click()
     driver.find_element_by_css_selector('.textarea_tit').send_keys("제목을 입력합니다.")
+    driver.find_element_by_id('mceu_0-open').click()  # 첨부 클릭
+    driver.find_element_by_id('mceu_32').click()  # 사진 클릭
+    time.sleep(3)
+
+    # pywinauto 라이브러리로 windows dialog 제어
+    # 파이썬에서 \\ = \
+    upload_img("C:\\test_img.png")
+
+    # sys.exit()  # 프로그램 종료
     # iframe : html 안에 또 다른 html이 있는 것
     # iframe 위치 지정. (iframe을 감싸고 있는 div 하위에 iframe이 있음)
-    iframe = driver.find_element_by_css_selector('.mce-edit-area.mce-container.mce-panel.mce-stack-layout-item.mce-last iframe')
+    iframe = driver.find_element_by_css_selector(
+        '.mce-edit-area.mce-container.mce-panel.mce-stack-layout-item.mce-last iframe')
     # iframe으로 이동
     driver.switch_to.frame(iframe)
     # iframe 안의 콘텐츠 작성 영역(p 태그)에 내용 입력
     driver.find_element_by_tag_name('p').send_keys("내용을 입력합니다.")
     # 기존 프레임으로 이동
     driver.switch_to.default_content()
+    # 태그1-3 입력
     driver.find_element_by_name('tagText').send_keys("태그1" + Keys.ENTER + "태그2" + Keys.ENTER + "태그3" + Keys.ENTER)
+    # '완료' 버튼 클릭
     driver.find_element_by_css_selector('.btn.btn-default').click()
     driver.implicitly_wait(5)
 
@@ -60,13 +78,13 @@ def posting():
     print(driver.find_element_by_id('open15').get_attribute('value'))
     print(driver.find_element_by_css_selector('.btn.btn-default').is_enabled())
 
-    delay = 5 # seconds
+    delay = 5  # seconds
 
     while 1:
         try:
             WebDriverWait(driver, delay).until(expected_conditions.invisibility_of_element(
                 (By.CSS_SELECTOR, '.tit_cont')
-                )
+            )
             )
             driver.find_element_by_css_selector('.btn.btn-default').click()
             print("계속 클릭 중")

@@ -14,7 +14,7 @@ driver.get(url)
 # 브라우저 크기를 1260 x 890으로 조정
 driver.set_window_size(1280, 950)
 
-time.sleep(1)
+time.sleep(0.5)
 
 # 티스토리 메인 > 로그인 페이지 이동
 driver.find_element(By.XPATH, '//*[@id="kakaoHead"]/div/div[3]/div/a[1]').click()

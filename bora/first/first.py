@@ -24,7 +24,7 @@ def login(id, pw):
     driver.find_element_by_name('password').send_keys(Keys.ENTER)
 
 
-login('eunsk31@daum.net', 'master123$')
+login('eunsk31@daum.net', '')
 
 
 # 이미지 첨부 함수
@@ -42,13 +42,6 @@ def posting():
     driver.find_element_by_css_selector('.thumb_profile').click()
     driver.find_element_by_link_text('쓰기').click()
     driver.find_element_by_css_selector('.textarea_tit').send_keys("제목을 입력합니다.")
-    driver.find_element_by_id('mceu_0-open').click()  # 첨부 클릭
-    driver.find_element_by_id('mceu_32').click()  # 사진 클릭
-    time.sleep(3)
-
-    # pywinauto 라이브러리로 windows dialog 제어
-    # 파이썬에서 \\ = \
-    upload_img("C:\\test_img.png")
 
     # sys.exit()  # 프로그램 종료
     # iframe : html 안에 또 다른 html이 있는 것
@@ -61,11 +54,20 @@ def posting():
     driver.find_element_by_tag_name('p').send_keys("내용을 입력합니다.")
     # 기존 프레임으로 이동
     driver.switch_to.default_content()
+
+    driver.find_element_by_id('mceu_0-open').click()  # 첨부 클릭
+    driver.find_element_by_id('mceu_32').click()  # 사진 클릭
+    time.sleep(3)
+
+    # pywinauto 라이브러리로 windows dialog 제어
+    # 파이썬에서 \\ = \
+    upload_img("C:\\test_img.png")
+
     # 태그1-3 입력
     driver.find_element_by_name('tagText').send_keys("태그1" + Keys.ENTER + "태그2" + Keys.ENTER + "태그3" + Keys.ENTER)
     # [완료] 버튼 클릭
     driver.find_element_by_css_selector('.btn.btn-default').click()
-    driver.implicitly_wait(5)
+    time.sleep(3)
 
     if driver.find_element_by_id('open0').is_selected():
         print("비공개")
@@ -77,6 +79,9 @@ def posting():
     print(driver.find_element_by_id('open20').get_attribute('value'))
     print(driver.find_element_by_id('open15').get_attribute('value'))
     print(driver.find_element_by_css_selector('.btn.btn-default').is_enabled())
+
+    # 포스팅 범위 '공개' 설정
+    driver.find_elements_by_css_selector('.form-radio.klink-linknew')[0].click()
 
     # [완료 > 두번째 저장] 클릭
     # [완료]와 [두번째 저장] 버튼 클래스가 동일해서 [두번째 저장]을 클릭하려면 배열 요소를 명시해줘야 함
